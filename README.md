@@ -24,3 +24,5 @@ git clone https://github.com/nazstone/NazRadio.git nazradio
 cd nazradio
 sudo npm install
 ```
+## Configuration
+Edit the javascript file `conf / config.js`
