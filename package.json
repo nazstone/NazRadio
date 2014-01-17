@@ -1,0 +1,39 @@
+{
+   "name":"nazmpd",
+   "version":"0.0.1",
+   "private": true,
+   "author":"Matthieu Lambert <nazstone@gmail.com>",
+   "description":"Client web for mpd server. Responsive design UI, for smartphone and desktop",
+   "contributors":[
+      {
+         "name":"Matthieu Lambert",
+         "email":"nazstone@gmail.com"
+      }
+   ],
+   "scripts":{
+      "start":"node server.js"
+   },
+   "repository":{
+      "type":"git",
+      "url":"https://github.com/"
+   },
+   "keywords":[
+      "mpd",
+      "http",
+      "server"
+   ],
+   "dependencies":{
+      "express":"3.*",
+      "express3-handlebars":"0.5.*",
+      "i18n":"0.4.*",
+      "sudo":"1.*",
+      "clah":"1.*",
+      "underscore":"1.*",
+      "socket.io":"0.*",
+      "mpd":"1.*"
+   },
+   "license":"MIT",
+   "engines":{
+      "node":">=0.10.21"
+   }
+}
