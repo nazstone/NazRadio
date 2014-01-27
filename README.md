@@ -28,8 +28,7 @@ sudo npm install
 Edit the javascript file `conf / config.js`
 
 ### Radio
-To change/add/remove web radio, update the JSON file `conf/radios.json`
-A screen to remove/add/change the radio is in progress
+A interface to quickly add/remove radio is available
 
 ### Screenshot
 ![Mobile](https://dl.dropboxusercontent.com/u/19730414/Screenshot_2014-01-20-20-07-11.png)
