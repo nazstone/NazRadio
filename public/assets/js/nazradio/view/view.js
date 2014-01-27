@@ -201,7 +201,8 @@ define(["jquery", "marionette", "nazradio/model", "nazradio/util"],
             className: "list-group-item browse-row",
             template: "#radio-row-template",
             triggers: {
-                "click #control-play": "click:item:play"
+                "click #control-play": "click:item:play",
+                "click #control-remove": "click:item:remove"
             }
         });
         var RadioView = Marionette.CompositeView.extend({
@@ -226,13 +227,49 @@ define(["jquery", "marionette", "nazradio/model", "nazradio/util"],
                 this.collection = radios;
                 this.render();
             },
-            initialize : function() {
+            initialize: function () {
                 this.on("radioItem:click:item:play", this.clickOnRowPlay);
+                this.on("radioItem:click:item:remove", this.clickOnRowRemove);
             },
-            clickOnRowPlay : function(args) {
+            onDomRefresh: function(){
+                $("#radio-add #title").focusin(function () {
+                    $("#radio-add #title").css('background-color', '');
+                });
+                $("#radio-add #url").focusin(function () {
+                    $("#radio-add #url").css('background-color', '');
+                });
+            },
+            clickOnRowPlay: function (args) {
                 window.controllerRadio.sendPlayRadio(args.model.get("id"));
-                console.log(args.model.get("id"));
-            }
+                console.log("play " + args.model.get("id"));
+            },
+            clickOnRowRemove: function (args) {
+                window.controllerRadio.sendRemoveRadio(args.model.get("id"));
+                console.log("remove " + args.model.get("id"));
+            },
+            clickOnInsertRadio: function () {
+                if ($("#radio-add #title").val() != "" && $("#radio-add #url").val() != "") {
+                    $("#radio-add #title").css('background-color', '');
+                    $("#radio-add #url").css('background-color', '');
+                    window.controllerRadio.sendInsertRadio($("#radio-add #title").val(), $("#radio-add #url").val());
+                    console.log("insert");
+                } else {
+                    window.notif(messageEmptyField, false);
+                    $("#radio-add #title").css('background-color', '#f00');
+                    $("#radio-add #url").css('background-color', '#f00');
+                }
+            },
+            clickOnShowHideInsertRadio: function () {
+                if ($("#radio-add").is(":visible")) {
+                    $("#radio-add").hide();
+                } else {
+                    $("#radio-add").show();
+                }
+            },
+            events: {
+                "click #control-add": "clickOnInsertRadio",
+                "click #control-plus": "clickOnShowHideInsertRadio"
+            },
         });
         return {
             BrowseView: BrowseView,

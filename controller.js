@@ -1,6 +1,8 @@
 var NazMpd = require('./lib/nazMpd.js');
 var sudo = require('sudo');
 var fs = require('fs');
+var RadioDB = require('./lib/radioDB.js');
+var crypto = require('crypto');
 
 var Controller = function (config, io) {
     this.config = config;
@@ -11,6 +13,8 @@ var Controller = function (config, io) {
     try {
         /** mpd **/
         this.nazMpd = new NazMpd();
+        this.radioDB = new RadioDB();
+
         self.nazMpd.connect(self.config.mpd.host, self.config.mpd.port, function () {
             self.statusPlayListPlayerStatus();
         });
@@ -187,42 +191,77 @@ Controller.prototype = {
         }
     },
 
-    getRadiosJson: function (callback) {
-        var file = __dirname + '/conf/radios.json';
-
-        fs.readFile(file, 'utf8', function (err, data) {
+    getRadios: function (callback) {
+        this.radioDB.getAll(function (err, data) {
             if (err) {
-                console.log('Error: ' + err);
-                data = null;
+                this.sendErrorMessageOnSocketOn(err);
+                callback(null);
+            } else {
+                callback({
+                    "radios": data
+                });
             }
-            var radiosTmp = JSON.parse(data);
-            callback(radiosTmp);
+        });
+    },
+
+    getRadioById: function (id, callback) {
+        this.radioDB.getRadioById(id, function (err, data) {
+            if (err) {
+                this.sendErrorMessageOnSocketOn(err);
+            } else {
+                callback(data);
+            }
+        });
+    },
+
+    insertRadio: function (title, url, callback) {
+        if (title != null && title != "" > 0 && url != null && url != "") {
+            var md5sum = crypto.createHash('md5');
+            var id = md5sum.update(title + " " + url).digest('hex');
+            this.radioDB.insertRadio(id, title, url, function (err, data) {
+                if (err) {
+                    this.sendErrorMessageOnSocketOn(err);
+                } else {
+                    callback();
+                }
+            });
+        }
+    },
+
+    removeRadio: function (id, callback) {
+        this.radioDB.removeRadio(id, function (err, data) {
+            if (err) {
+                this.sendErrorMessageOnSocketOn(err);
+            } else {
+                callback();
+            }
         });
     },
 
     radioControlSwitch: function (control) {
         var self = this;
         if (control.action == 'getAll') {
-            self.getRadiosJson(function (data) {
+            self.getRadios(function (data) {
                 self.socket.emit("radioStatus", data);
             });
         } else if (control.action == 'play') {
-            self.getRadiosJson(function (data) {
-                var radiosLength = data.radios.length;
-                var i = 0;
-                while (control.id != data.radios[i].id && i < radiosLength) {
-                    i++;
-                }
-                if (i < radiosLength) {
-                    self.nazMpd.clearPlaylist(function () {
-                        var tmp = [{
-                            file: data.radios[i].url
+            self.getRadioById(control.id, function (data) {
+                self.nazMpd.clearPlaylist(function () {
+                    var tmp = [{
+                        file: data.url
                         }];
-                        self.nazMpd.addToPlaylist(tmp, function () {
-                            self.nazMpd.play(function () {});
-                        });
+                    self.nazMpd.addToPlaylist(tmp, function () {
+                        self.nazMpd.play(function () {});
                     });
-                }
+                });
+            });
+        } else if (control.action == 'remove') {
+            self.removeRadio(control.id, function () {
+                self.radioControlSwitch({action:"getAll"});
+            });
+        } else if (control.action == 'insert') {
+            self.insertRadio(control.title, control.url, function () {
+                self.radioControlSwitch({action:"getAll"});
             });
         }
     }

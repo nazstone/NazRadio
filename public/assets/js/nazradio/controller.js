@@ -95,6 +95,12 @@ define(["class"], function () {
         },
         sendPlayRadio : function(id) {
             window.socket.emit('radioControl', {action: "play", id : id});
+        },
+        sendInsertRadio : function(title, url) {
+            window.socket.emit('radioControl', {action: "insert", title : title, url : url});
+        },
+        sendRemoveRadio : function(id) {
+            window.socket.emit('radioControl', {action: "remove", id : id});
         }
     });
 
