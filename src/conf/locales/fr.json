@@ -1,0 +1,22 @@
+{
+    "library": "Bibliothèque",
+    "navbar_title_browse": "Parcourir",
+    "navbar_title_playlist": "Playlist",
+    "navbar_title_settings": "Paramètres",
+    "navbar_title_radio": "Radio",
+    "search_title": "Recherche",
+    "settings_update_label": "Mettre à jour la base de données de musique",
+    "settings_update_button": "Lancer",
+    "settings_stop_label": "Arrêter le serveur",
+    "settings_stop_button": "Arrêter",
+    "message_socket_error": "Socket deconnectee - un incident a pu survenir",
+    "message_file_add_playlist": "Les morceaux ont été ajouté à la playlist",
+    "message_update_progress": "Mise à jour en cours",
+    "message_stop": "Arrêt",
+    "message_global_error": "Une erreur est survenue, rebooter parfois ca marche:)",
+    "radio": "Radio",
+    "radio_button_add": "Ajouter",
+    "radio_error_empty_field": "Veuillez remplir tous les champs",
+    "radio_placeholder_url" : "URL de la radio",
+    "radio_placeholder_title" : "Titre de la radio"
+}

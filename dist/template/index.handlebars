@@ -1,0 +1,69 @@
+<!DOCTYPE html><html><head><title>{{title}}</title><meta name="viewport" content="width=device-width, initial-scale=1.0 user-scalable=no"><link href="assets/css/bootstrap.min.css" rel="stylesheet" media="screen"><link href="assets/css/nazradio.css" rel="stylesheet" media="screen"><link href="assets/css/jquery.pnotify.default.css" media="all" rel="stylesheet" type="text/css"><!--[if lt IE 9]><script src="assets/js/lib/html5shiv.js"></script>
+			<script src="assets/js/lib/respond.min.js"></script><![endif]--></head><body style="background-color: orange"><header class="global_container global-header"><div class="navbar navbar-inverse"><div class="navbar-header"><button type="button" class="navbar-toggle collapsed" id="menu_button"><span class="icon-bar"></span> <span class="icon-bar"></span> <span class="icon-bar"></span></button><div style="white-space: nowrap"><a class="navbar-brand" href="#"><span class="glyphicon glyphicon-headphones" style="top:-1px"></span>&nbsp;{{title}}</a><div id="notif"></div></div></div><div class="navbar-collapse collapse" id="menu"><ul class="nav navbar-nav navbar-right"><li class="active"><a href="#" id="select_playlist">{{{__ "navbar_title_playlist"}}}</a></li><li><a href="#browse" id="select_browse">{{{__ "navbar_title_browse"}}}</a></li><li><a href="#radio" id="select_radio">{{{__ "navbar_title_radio"}}}</a></li><li><a href="#settings" id="select_settings">{{{__ "navbar_title_settings"}}}</a></li></ul></div></div></header><div class="global_container main-content"><div class="row row_constraint"><div class="col-sm-6 show-grid" id="control-player"></div><div class="col-sm-6 show-grid" id="control-list"></div></div></div><footer class="global_container global-footer"><nav class="navbar navbar-inverse" role="navigation"></nav></footer><script id="playlist-row-template" type="text/html"><div class="wrap wrap_playlist" style="<%if(play){%>background-color:#dddddd;<%}%>">
+			<a name="itemplaylist<%=pos%>"></a>
+			<div class="wrap_right"><%=time%>
+				<span class="glyphicon glyphicon-play global_right_margin global_left_margin" id="control-play"></span>
+				<span class="glyphicon glyphicon-trash global_right_margin" id="control-trash"></span>
+			</div>
+			<div class="wrap_title"><%= pos + 1 %> - <b><%= name %></b> - <%= artist %></div>
+		</div></script><script id="playlist-template" type="text/html"><h4 class="global_left_margin global_left_margin_sm" style="float: left;" >{{{__ "navbar_title_playlist"}}}</h4>
+		<button type="button" class="btn btn-default global_right_margin" id="control-trash" style="float:right;">
+			<span class="glyphicon glyphicon-trash"></span>
+		</button>
+		<div id="playlist-container" class="global_left_margin global_right_margin global_left_margin_sm">
+		</div>
+		<div>&nbsp;&nbsp;&nbsp;</div>
+		<div>&nbsp;&nbsp;&nbsp;</div>
+		<div>&nbsp;&nbsp;&nbsp;</div></script><script id="browse-row-template" type="text/html"><div class="wrap" id="item">
+			<div class="wrap_right">
+				<span class="glyphicon glyphicon-play global_right_margin" id="control-play"></span>
+				<span class="glyphicon glyphicon-plus" id="control-add"></span>
+			</div>
+			<div class="wrap_title"><%= name %></div>
+		</div></script><script id="browse-template" type="text/html"><h4 class="global_left_margin global_left_margin_sm">{{{__ "navbar_title_browse"}}}</h4>
+		<ol class="breadcrumb global_left_margin global_right_margin global_left_margin_sm">
+			<li><a href="javascript:;" id="reloadRoot">{{{__ "library"}}}</a></li>
+			<% if (artist != null && artist.length > 0) { %><li><% if (album != null && album.length > 0) { %><a href="javascript:;" id="reloadArtist"><% } %><%=artist%><% if (album != null && album.length > 0) { %></a><% } %></li><% } %>	
+			<% if (album != null && album.length > 0) { %><li><%=album%></li><% } %>
+		</ol>
+		<div id="browse-container" class="global_left_margin global_right_margin global_left_margin_sm">
+		</div>
+		<div>&nbsp;&nbsp;&nbsp;</div></script><script id="radio-row-template" type="text/html"><div class="wrap wrap_radio">
+			<div class="wrap_right">
+				<span class="glyphicon glyphicon-play global_right_margin global_left_margin" id="control-play"></span>
+                <span class="glyphicon glyphicon-remove global_right_margin global_left_margin" id="control-remove"></span>
+			</div>
+			<div class="wrap_title"><%= title %></div>
+		</div></script><script id="radio-template" type="text/html"><span class="glyphicon glyphicon-plus global_right_margin global_left_margin radio_template_plus" id="control-plus"></span>
+		<h4 class="global_left_margin global_left_margin_sm" style="display:inline-block;">{{{__ "navbar_title_radio"}}}</h4>
+        <div id="radio-add" class="global_left_margin_sm global_right_margin global_left_margin" style="display:none;">
+            <button type="button" id="control-add" style="float:right; margin-left:5px;" class="btn btn-default">{{{__ "radio_button_add"}}}</button>
+            <div style="overflow:hidden;">
+                <input type="text" id="title" style="width:100%;margin-top:5px;" placeholder="{{{__ "radio_placeholder_title"}}}"/>
+            </div>
+            <input type="text" id="url" style="width:100%;margin-top:5px;" placeholder="{{{__ "radio_placeholder_url"}}}"/>
+        </div>
+        <div>&nbsp;&nbsp;&nbsp;</div>
+		<div id="radio-container" class="global_left_margin global_right_margin global_left_margin_sm">
+		</div>
+        <div>&nbsp;&nbsp;&nbsp;</div></script><script id="settings-template" type="text/html"><div style="width: 100%;float:left;" class="global_left_margin">
+			<div style="float:left">{{{__ "settings_update_label"}}}</div>
+			<div style="float:right">
+				<button type="button" class="btn btn-default global_right_margin" id="update">{{{__ "settings_update_button"}}}</button>
+			</div>
+		</div>
+		<div style="width: 100%;" class="global_left_margin">
+			<div style="float:left">{{{__ "settings_stop_label"}}}</div>
+			<div style="float:right">
+				<button type="button" class="btn btn-default global_right_margin" id="shutdown">{{{__ "settings_stop_button"}}}</button>
+			</div>
+		</div>
+        <div>&nbsp;&nbsp;&nbsp;</div></script><script>wsUrl = "{{wsUrl}}";
+        wsPort = "{{wsPort}}";
+        message_socket_error = "{{{__ 'message_socket_error'}}}";
+        message_file_add_playlist = "{{{__ 'message_file_add_playlist'}}}";
+        message_global_error = "{{{__ 'message_global_error'}}}";
+        message_update_progress = "{{{__ 'message_update_progress'}}}";
+        message_stop = "{{{__ 'message_stop'}}}";
+        radio = "{{{__ 'radio'}}}";
+        messageEmptyField = "{{{__ 'radio_error_empty_field'}}}";</script><script data-main="assets/js/main" src="assets/js/lib/require.js"></script></body></html>

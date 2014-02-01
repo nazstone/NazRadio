@@ -248,15 +248,17 @@ define(["jquery", "marionette", "nazradio/model", "nazradio/util"],
                 console.log("remove " + args.model.get("id"));
             },
             clickOnInsertRadio: function () {
-                if ($("#radio-add #title").val() != "" && $("#radio-add #url").val() != "") {
-                    $("#radio-add #title").css('background-color', '');
-                    $("#radio-add #url").css('background-color', '');
-                    window.controllerRadio.sendInsertRadio($("#radio-add #title").val(), $("#radio-add #url").val());
-                    console.log("insert");
+                var jqueryTitle = "#radio-add #title";
+                var jqueryUrl = "#radio-add #url";
+                var cssColor = 'background-color';
+                if ($(jqueryTitle).val() != "" && $(jqueryUrl).val() != "") {
+                    $(jqueryTitle).css(cssColor, '');
+                    $(jqueryUrl).css(cssColor, '');
+                    window.controllerRadio.sendInsertRadio($(jqueryTitle).val(), $(jqueryUrl).val());
                 } else {
                     window.notif(messageEmptyField, false);
-                    $("#radio-add #title").css('background-color', '#f00');
-                    $("#radio-add #url").css('background-color', '#f00');
+                    $(jqueryTitle).css(cssColor, '#f00');
+                    $(jqueryUrl).css(cssColor, '#f00');
                 }
             },
             clickOnShowHideInsertRadio: function () {

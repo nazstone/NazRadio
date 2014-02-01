@@ -1,0 +1,1 @@
+define(["class"],function(){var a=Class.extend({timeToStr:function(a){if(!isNaN(a)){var b=parseInt(a)%60,c=parseInt(a/60)+":"+(10>b?"0":"")+b;return c}return""}});return{UtilTime:new a}});

@@ -1,0 +1,131 @@
+* {
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+}
+.show-grid[class^="col-"] {
+    padding-top: 10px;
+    padding-bottom: 10px;
+    background-color: rgba(86, 61, 124, .15);
+    border: 1px solid rgba(86, 61, 124, .2);
+}
+body {
+    font-family: arial;
+}
+.global_container {
+    width: 100%;
+    float: left;
+}
+.global-header {
+    position: fixed;
+    top: 0;
+    background-color: gray;
+    height: 50px;
+}
+.global-footer {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    height: 36px;
+    background-color: gray;
+}
+.global_left_margin {
+    margin-left: 10px;
+}
+.global_right_margin {
+    margin-right: 10px;
+}
+.main-content {
+    position: relative;
+    margin-top: 50px;
+    margin-bottom: 36px;
+    z-index: -1;
+}
+.playlist-row {
+    float: left;
+    width: 100%;
+}
+.playlist-row.list-group-item {
+    padding: 0px;
+}
+.browse-row {
+    float: left;
+    width: 100%;
+}
+#control-list {
+    padding-left: 1px;
+}
+#control-player {
+    padding-right: 1px;
+    padding-bottom: 1px;
+}
+.track-sumup {
+    float: left;
+    width: 100%;
+}
+.wrap {
+    width: 100%;
+}
+.wrap_progress {
+    width: 100%;
+}
+.wrap_title,
+.wrap_right {
+    padding-top: 1px;
+}
+.wrap_title {
+    text-align: left;
+    display: block;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+    padding-left: 3px;
+}
+.wrap_right {
+    float: right;
+    text-align: right;
+    white-space: nowrap;
+    padding-right: 3px;
+}
+.wrap_time_player {
+    padding-right: 40px;
+}
+.wrap_playlist {
+    padding-bottom: 10px;
+    padding-top: 10px;
+    padding-right: 15px;
+    padding-left: 15px;
+}
+#notif {
+    color: white;
+    padding-top: 16px;
+}
+.row.row_constraint {
+    margin-left: 0px;
+    margin-right: 0px;
+}
+.wrap.wrap_radio {
+    padding-top: 0px;
+    padding-bottom: 0px;
+}
+.radio_template_plus {
+    top: 10px;
+    float: right;
+}
+@media screen and (max-width: 768px) {
+    .global_left_margin_sm {
+        margin-left: 20px;
+    }
+    .global_right_margin_sm {
+        margin-right: 20px;
+    }
+    .wrap_time_player {
+        padding-right: 50px;
+    }
+    .wrap_progress {
+        width: 90%;
+    }
+    .wrap_time_player {
+        padding-right: 20px;
+    }
+}

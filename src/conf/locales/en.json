@@ -1,0 +1,22 @@
+{
+    "library": "Library",
+    "navbar_title_browse": "Browse",
+    "navbar_title_playlist": "Playlist",
+    "navbar_title_settings": "Settings",
+    "navbar_title_radio": "Radio",
+    "search_title": "Search",
+    "settings_update_label": "Update music's database",
+    "settings_update_button": "Update",
+    "settings_stop_label": "Stop the server",
+    "settings_stop_button": "Stop",
+    "message_socket_error": "Socket error - an error",
+    "message_file_add_playlist": "Music add to the playlist",
+    "message_update_progress": "Music database is updating",
+    "message_stop": "Stop",
+    "message_global_error": "Something wrong append, it cool be mpd or nodejs... reboot your server, sometime it works :)",
+    "radio": "Radio",
+    "radio_button_add": "Add",
+    "radio_error_empty_field": "Please fill all inputs",
+    "radio_placeholder_url" : "URL",
+    "radio_placeholder_title" : "Title"
+}
