@@ -33,7 +33,10 @@
     "underscore": "1.*",
     "socket.io": "0.*",
     "mpd": "1.*",
-    "sqlite3": "2.*"
+    "sqlite3": "2.*",
+    "querystring" : "0.*",
+    "request" : "2.*",
+    "musicmetadata" : "0.*"
   },
   "license": "MIT",
   "engines": {

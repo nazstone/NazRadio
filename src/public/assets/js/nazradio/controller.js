@@ -1,7 +1,14 @@
-define(["class"], function () {
+define(["class", "jquery"], function (Class, $) {
 	var ControllerPlayer = Class.extend({
-		init : function(callback) {
+		init : function(callback, callbackCover) {
+            var self = this;
 			window.socket.on("playerStatus", callback);
+            window.socket.on("playerCover", function(data) {
+                if (self.release == null || self.release != data.release) {
+                    self.release = data.release;
+                    window.playerView.cover(data.release);
+                }
+            });
 		},
 		sendPlay : function() {
 			this.sendAction("play");
@@ -25,10 +32,9 @@ define(["class"], function () {
 			window.socket.emit('playerControl', {action: action});
 		}
 	});
-	
+
 	var ControllerPlaylist = Class.extend({
 		init : function(callback) {
-			window.socket.on("playlistStatus", callback);
 		},
 		sendStatus : function() {
 			window.socket.emit('playlistControl', {action: "status"});

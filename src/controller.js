@@ -3,6 +3,8 @@ var sudo = require('sudo');
 var fs = require('fs');
 var RadioDB = require('./lib/radioDB.js');
 var crypto = require('crypto');
+var config = require('./conf/config.js');
+var CoverArt = require('./lib/cover.js');
 
 var Controller = function (config, io) {
     this.config = config;
@@ -17,6 +19,15 @@ var Controller = function (config, io) {
 
         self.nazMpd.connect(self.config.mpd.host, self.config.mpd.port, function () {
             self.statusPlayListPlayerStatus();
+        });
+        self.nazMpd.addCallbackOnPlayer(function() {
+            if (self.config.mpd.cover.enabled) {
+                self.nazMpd.status(function (status) {
+                    self.nazMpd.playlist(function (playlist) {
+                        self.coverArtAlbum(status, playlist);
+                    });
+                });
+            }
         });
     } catch (error) {
         self.sendErrorMessageOnSocketOn(error);
@@ -115,11 +126,6 @@ Controller.prototype = {
 
     playlistControlSwitch: function (data) {
         var self = this;
-        refreshStatus = function (status) {
-            self.socket.emit("playlistStatus", {
-                playlist: status
-            });
-        };
         try {
             switch (data.action) {
             case "status":
@@ -130,7 +136,7 @@ Controller.prototype = {
                 self.nazMpd.clearPlaylist(function () {
                     self.nazMpd.findAllTitlesFromAlbumAndArtist(data.artist, data.album, data.title, function (file) {
                         self.nazMpd.addToPlaylist(file, function () {
-                            self.nazMpd.play(refreshStatus);
+                            self.nazMpd.play();
                         });
                     });
                 });
@@ -138,23 +144,19 @@ Controller.prototype = {
 
             case "add":
                 self.nazMpd.findAllTitlesFromAlbumAndArtist(data.artist, data.album, data.title, function (file) {
-                    self.nazMpd.addToPlaylist(file, refreshStatus);
+                    self.nazMpd.addToPlaylist(file);
                 });
                 break;
 
             case "clear":
-                self.nazMpd.clearPlaylist(refreshStatus);
+                self.nazMpd.clearPlaylist();
                 break;
 
             case "remove":
-                self.nazMpd.removeFromPlaylist(data.position, function () {
-                    self.statusPlayListPlayerStatus();
-                });
+                self.nazMpd.removeFromPlaylist(data.position);
                 break;
             case "playPos":
-                self.nazMpd.playFromPlaylistPosition(data.position, function () {
-                    self.statusPlayListPlayerStatus();
-                });
+                self.nazMpd.playFromPlaylistPosition(data.position);
                 break;
             default:
                 break;
@@ -257,13 +259,62 @@ Controller.prototype = {
             });
         } else if (control.action == 'remove') {
             self.removeRadio(control.id, function () {
-                self.radioControlSwitch({action:"getAll"});
+                self.radioControlSwitch({
+                    action: "getAll"
+                });
             });
         } else if (control.action == 'insert') {
             self.insertRadio(control.title, control.url, function () {
-                self.radioControlSwitch({action:"getAll"});
+                self.radioControlSwitch({
+                    action: "getAll"
+                });
             });
         }
+    },
+
+    coverArtAlbum: function (status, playlist) {
+        var self = this;
+        //get info like album, artist, file
+        var songId = (playlist > status.song) ? status.song : 0;
+        var artist = playlist[songId].artist;
+        var album = playlist[songId].album;
+        var file = playlist[songId].file;
+        //create mdr5 sum to find or create coverart file on disk
+        var md5sum = crypto.createHash('md5');
+        var id = md5sum.update("(" + artist + ")-(" + album + ")").digest('hex');
+
+        var cover = new CoverArt(self.config.mpd.cover.dir + "/" + id);
+
+        var callbackFile = function (err, fileName) {
+            if (err) {
+                console.log("err " + err);
+                fs.writeFile(cover.recordFileName, '', function (err) {
+                    if (err) {
+                        throw err;
+                    }
+                    self.socket.emit('playerCover', {release : id});
+                });
+            } else {
+                self.socket.emit('playerCover', {release : id});
+            }
+        };
+
+        fs.exists(self.config.mpd.cover.dir + "/" + id, function (exists) {
+            if (!exists) {
+                console.log("file doesnt exist");
+                self.nazMpd.config(function (err, config) {
+                    if (!err) {
+                        var pathFile = config.music_directory + "/" + file;
+                        cover.getCoverByFile(pathFile, callbackFile);
+                    } else {
+                        cover.getCoverByMeta(artist, album, callbackFile);
+                    }
+                });
+            } else {
+                console.log("file exist");
+                callbackFile(null, cover.recordFileName);
+            }
+        });
     }
 };
 module.exports = Controller;

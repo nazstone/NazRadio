@@ -37,7 +37,7 @@ define(["jquery", "backbone", "nazradio/model", "nazradio/view/view"],
 			}
 			window.application.controlList.show(window.playlistView);
 			window.playlistView.delegateEvents();
-			window.controllerPlaylist.sendStatus();
+			//window.controllerPlaylist.sendStatus();
 		},
 		radio: function () {
 			this.selectItem($("#select_radio").parent());

@@ -21,6 +21,10 @@
 			this.client.on('system-player', this.refresh);
 			this.client.on('system-playlist', this.refresh);
 		},
+
+        addCallbackOnPlayer : function(callback) {
+            this.client.on('system-player', callback);
+        },
 		/**
 		 * retourne la liste des artistes
 		 * pour utiliser le resultat dans le callback
@@ -338,7 +342,15 @@
 						callback();
 					}
 				});
-		}
+		},
+        config : function(callback) {
+            this.client.sendCommand(cmd("config", []),
+				function (err, msg) {
+					if (callback) {
+						callback(err, msg);
+					}
+				});
+        }
 	});
 	module.exports = NazMpd;
 })();

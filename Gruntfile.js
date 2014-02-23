@@ -36,6 +36,12 @@ module.exports = function (grunt) {
                         src: ['**/*.*', '!public/assets/js/nazradio/**/*.js', '!*.sqlite3', '!public/assets/css/**/*.css', 'public/assets/css/**/*.min.css'],
                         dest: 'dist/'
                     },
+                    {
+                        expand: true,
+                        cwd: './',
+                        src: ['package.json'],
+                        dest: 'dist/'
+                    },
             ]
             }
         },
@@ -50,7 +56,7 @@ module.exports = function (grunt) {
                 files: [
                     {
                         src: ['dist/**/*.*'],
-                        dest: 'zip/'
+                        dest: '.'
                     }
                 ]
             }
@@ -78,6 +84,5 @@ module.exports = function (grunt) {
 
     // Default task(s).
     grunt.registerTask('default', ['clean', 'copy', 'uglify', 'cssmin', 'htmlmin']);
-    grunt.registerTask('release', ['clean:main', 'copy:main', 'uglify:main', 'cssmin:main', 'compress:main']);
 
 };

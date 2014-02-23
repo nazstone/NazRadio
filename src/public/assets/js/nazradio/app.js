@@ -53,8 +53,9 @@ requirejs(["jquery", "marionette", "nazradio/model", "nazradio/router", "nazradi
 			window.playerView.displayInfo(data);
 			window.playlistView.displayInfo(data);
 		});
+        
 		window.controllerPlaylist = new controller.ControllerPlaylist(function (data) {
-			window.playlistView.displayInfo(data);
+
 		});
 		window.controllerBrowser = new controller.ControllerBrowser(function (data) {
 			window.browseView.displayInfo(data);

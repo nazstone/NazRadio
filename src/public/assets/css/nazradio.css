@@ -88,7 +88,7 @@ body {
     padding-right: 3px;
 }
 .wrap_time_player {
-    padding-right: 40px;
+    
 }
 .wrap_playlist {
     padding-bottom: 10px;
@@ -112,6 +112,17 @@ body {
     top: 10px;
     float: right;
 }
+
+.progress.global_left_margin.global_right_margin {
+
+}
+
+#playing_info {
+    position:absolute;
+    width:100%;
+    
+}
+
 @media screen and (max-width: 768px) {
     .global_left_margin_sm {
         margin-left: 20px;
@@ -120,12 +131,41 @@ body {
         margin-right: 20px;
     }
     .wrap_time_player {
-        padding-right: 50px;
+        
     }
     .wrap_progress {
-        width: 90%;
     }
-    .wrap_time_player {
-        padding-right: 20px;
+    #control-player {
+        padding-right: 1px;
+        padding-bottom: 1px;
+        float:right;
+        width:80%;
     }
+    #coverart {
+        float:left;
+        width:20%;
+        height:100px;
+    }
+}
+
+
+.progressBar {
+    border-radius: 3px;
+    width: calc(100%-10px);
+    height: 20px;
+    background: white;
+    position: relative;
+    margin-bottom:10px;
+}
+
+.bar {
+    border-top-left-radius: 3px;
+    border-bottom-left-radius: 3px;
+    background: #5cb85c;
+    height: 20px;
+} 
+.progressText {
+    position: absolute;
+    top: 0px;
+    width: 100%;
 }

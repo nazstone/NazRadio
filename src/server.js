@@ -7,6 +7,7 @@ var server = require('http').createServer(app);
 var os = require("os");
 var Controller = require("./controller.js");
 var NazMpd = require('./lib/nazMpd.js');
+var fs = require('fs');
 
 /** web **/
 server.listen(config.web.port);
@@ -18,11 +19,51 @@ i18n.configure({
     directory: __dirname + "/conf/locales"
 });
 
+if (config.mpd.cover.enabled) {
+    fs.exists(config.mpd.cover.dir, function(exists) {
+        if (!exists) {
+            fs.mkdir(config.mpd.cover.dir, function() {
+                console.log("covert config create");
+            });
+        }
+    });
+}
 
 app.use("/assets", express.static(__dirname + '/public/assets'));
 app.use(i18n.init);
 app.engine('handlebars', exphbs());
 app.set('view engine', 'handlebars');
+
+app.get('/coverArt/:release', function (req, res) {
+    var release = req.params.release;
+    
+    console.log("requete");
+    
+    var callbackError = function() {
+        res.writeHead(404);
+        res.send();
+    };
+
+    if (release != null && release.length > 0) {
+        var path = config.mpd.cover.dir + "/" + release;
+        console.log(path);
+        fs.exists(path, function (exists) {
+            if (exists) {
+                var stat = fs.statSync(path);
+                if (stat.size > 0) {
+                    res.writeHead(200);
+                    fs.createReadStream(path).pipe(res);
+                } else {
+                    callbackError();
+                }
+            } else {
+                callbackError();
+            }
+        });
+    } else {
+        callbackError();
+    }
+});
 
 app.get('/*', function (req, res) {
     res.render(__dirname + '/template/index.handlebars', {
